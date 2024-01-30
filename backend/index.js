@@ -1,11 +1,14 @@
 const express = require('express');
 require('./DB/index');
 const userCtlr = require('./Controllers/userCtlr');
+const cors = require('cors');
+const {PORT} = require('./config');
 
 const app = express();
-const PORT = 3000;
+app.use(cors());
+app.use(express.json());
 
-app.use('/user', userCtlr);
+app.use('/api/v1/user', userCtlr);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

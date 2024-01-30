@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
-
-const mongoURI =
-  'mongodb+srv://Sachin:oiIYTc6Xva29zWqT@mongodb.7d1cjqv.mongodb.net/PayTM';
+const {MONGO_CONNECTION_URI} = require('../config');
 
 mongoose
-  .connect(mongoURI)
+  .connect(MONGO_CONNECTION_URI)
   .then(() => {
     console.log('Connected to PayTM DB');
   })

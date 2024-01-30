@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const {userModel} = require('../Model/userModel');
 const {JWT_SECRET} = require('../config');
 const authenticateUser = require('../Middleware/authenticateUser');
+const accountModel = require('../Model/accountModel');
 
 router.post('/signup', async (req, res) => {
   const {username, password, firstname, lastname} = req.body;
@@ -50,6 +51,11 @@ router.post('/signup', async (req, res) => {
       password: passwordHash,
       firstname,
       lastname,
+    });
+
+    const addBalance = await accountModel.create({
+      userId: response._id,
+      balance: Math.floor(Math.random() * 1000),
     });
 
     const token = await jwt.sign({userId: response._id}, JWT_SECRET);
@@ -134,4 +140,99 @@ router.post('/signin', async (req, res) => {
   }
 });
 
+router.put('/', authenticateUser, async (req, res) => {
+  const userUpdateSchema = z.object({
+    password: z
+      .string({
+        required_error: 'Password is required',
+      })
+      .min(6, {message: 'Must be 6 or more characters long'})
+      .optional(),
+    firstname: z
+      .string({
+        required_error: 'Firstname is required',
+      })
+      .trim()
+      .max(50, {message: 'Muse be 50 or fewer characters long'})
+      .optional(),
+    lastname: z
+      .string({
+        required_error: 'Firstname is required',
+      })
+      .trim()
+      .max(50, {message: 'Muse be 50 or fewer characters long'})
+      .optional(),
+  });
+
+  try {
+    const {password, firstname, lastname} = req.body;
+    const {userId} = req;
+
+    const {success} = userUpdateSchema.safeParse(req.body);
+    if (!success) {
+      res.status(411).send({
+        message: 'Error while updating information',
+      });
+    }
+
+    const User = await userModel.findOne({_id: userId});
+
+    let passwordHash = null;
+    let updatedUserDetails = {};
+
+    if (firstname) updatedUserDetails.firstname = firstname;
+    if (lastname) updatedUserDetails.lastname = lastname;
+
+    if (password) {
+      const salt = await bcrypt.genSalt();
+      passwordHash = await bcrypt.hash(password, salt);
+      updatedUserDetails.password = passwordHash;
+    }
+
+    let UpdatedDetails = await userModel.findOneAndUpdate(
+      {_id: userId},
+      updatedUserDetails,
+      {new: true}
+    );
+    res.status(200).send({message: 'Updated successfully'});
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res
+      .status(500)
+      .send({message: 'Error while updated information'});
+  }
+});
+
+router.get('/bulk', async (req, res) => {
+  const filterSchema = z.object({
+    filter: z.string().max(50),
+  });
+
+  const {success} = filterSchema.safeParse(req.query);
+
+  if (!success) {
+    return res.status(411).send({
+      message: 'filter input error',
+    });
+  }
+
+  try {
+    const {filter} = req.query;
+    const Users = await userModel
+      .find({
+        $or: [{firstname: filter}, {lastname: filter}],
+      })
+      .lean();
+
+    const data = Users.map((userItem) => {
+      const {password, ...dataWithoutPassword} = userItem;
+      return dataWithoutPassword;
+    });
+
+    res.status(200).send({users: data});
+  } catch (error) {
+    console.error('Error reading user details:', error);
+    res.status(500).send({error: 'Internal Server Error'});
+  }
+});
 module.exports = router;

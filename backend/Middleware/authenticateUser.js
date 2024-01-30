@@ -7,7 +7,7 @@ const authenticateUser = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
     const decoded = await jwt.verify(token, JWT_SECRET);
-    req.body.userId = decoded.userId;
+    req.userId = decoded.userId;
     next();
   } catch (error) {
     res.status(403).send(error);

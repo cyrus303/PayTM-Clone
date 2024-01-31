@@ -40,7 +40,10 @@ userController.userSignUp = async (req, res) => {
   });
 
   try {
-    userSchema.parse(req.body);
+    const {success} = userSchema.safeparse(req.body);
+
+    if (!success) {
+    }
 
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);

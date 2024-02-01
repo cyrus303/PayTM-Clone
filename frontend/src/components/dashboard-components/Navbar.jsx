@@ -11,24 +11,37 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {currentUserStateSelector} from '@/store/atoms/userAtom';
-import {useRecoilValueLoadable} from 'recoil';
-
+import axios from 'axios';
 import {LogOut, User} from 'lucide-react';
-
+import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 
 const Navbar = () => {
-  const currentUser = useRecoilValueLoadable(
-    currentUserStateSelector
-  );
-
+  const [currentUser, setCurrentUser] = useState('');
   const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/signin');
   };
+
+  const handleTokenRefresh = async () => {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(
+      'http://localhost:3000/api/v1/user/loggedInUser',
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+
+    setCurrentUser(response.data);
+  };
+
+  useEffect(() => {
+    handleTokenRefresh();
+  }, []);
 
   return (
     <div className="flex flex-col md:flex-row justify-between p-4 px-5 md:px-10 border-b-2 border-gray-300 items-center">
@@ -37,7 +50,7 @@ const Navbar = () => {
       </div>
       <div className="flex justify-between items-center">
         <span className="text-base md:text-xl mr-4 capitalize font-normal">
-          Hello, {currentUser?.contents?.firstname ?? 'User'}
+          Hello, {currentUser.firstname ?? 'User'}
         </span>
         <DropdownMenu>
           <DropdownMenuTrigger>

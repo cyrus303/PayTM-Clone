@@ -1,35 +1,16 @@
-import {useState, useEffect} from 'react';
-import {Input} from '@/components/ui/input';
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from '@/components/ui/avatar';
-import {Button} from '../ui/button';
-import {useRecoilState, useRecoilValue} from 'recoil';
+import {Input} from '@/components/ui/input';
 import {userListAtom} from '@/store/atoms/userAtom';
 import axios from 'axios';
+import {useEffect, useState} from 'react';
+import {useRecoilState} from 'recoil';
+import {Button} from '../ui/button';
 
 const UserDetails = () => {
-  const MOCK_DATA = {
-    users: [
-      {
-        _id: '65bb3ddc5ce0b0230d9929b5',
-        username: 'testing@gmail.com',
-        firstname: 'sachin',
-        lastname: 'mahesh',
-        __v: 0,
-      },
-      {
-        _id: '65bb4ca610de4a8827510e0d',
-        username: 'test4@gmail.com',
-        firstname: 'test',
-        lastname: 'test',
-        __v: 0,
-      },
-    ],
-  };
-
   const [filter, setFilter] = useRecoilState(userListAtom);
   const [userList, setUserList] = useState([]);
 
@@ -45,7 +26,6 @@ const UserDetails = () => {
           filter
         )}`
       );
-      console.log(response.data.users);
       setUserList(response.data.users);
       return response.data;
     } catch (error) {
@@ -58,6 +38,9 @@ const UserDetails = () => {
     loadData();
   }, [filter]);
 
+  const handleSendMoneyBtn = (user) => {
+    console.log(user);
+  };
   return (
     <>
       <div className="p-4 px-5 md:px-10 flex flex-col items-center">
@@ -94,14 +77,23 @@ const UserDetails = () => {
                     {`${user.firstname} ${user.lastname}`}
                   </div>
                 </div>
-                <Button className="text-sm md:text-base">
+                <Button
+                  className="text-sm md:text-base"
+                  onClick={() => {
+                    handleSendMoneyBtn(user);
+                  }}
+                >
                   Send Money
                 </Button>
               </div>
             </div>
           ))
         ) : (
-          <div>No users found</div>
+          <div className="w-full md:w-2/3 mt-4">
+            <div className="flex items-center justify-center p-2 md:p-4 bg-gray-100 rounded-md">
+              No Users Found
+            </div>
+          </div>
         )}
       </div>
     </>

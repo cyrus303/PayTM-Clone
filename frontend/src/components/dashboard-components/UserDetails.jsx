@@ -8,7 +8,8 @@ import {userListAtom} from '@/store/atoms/userAtom';
 import axios from 'axios';
 import {useEffect, useState} from 'react';
 import {useRecoilState} from 'recoil';
-import {Button} from '../ui/button';
+
+import MoneyTransfer from './MoneyTransfer';
 
 const UserDetails = () => {
   const [filter, setFilter] = useRecoilState(userListAtom);
@@ -38,16 +39,13 @@ const UserDetails = () => {
     loadData();
   }, [filter]);
 
-  const handleSendMoneyBtn = (user) => {
-    console.log(user);
-  };
   return (
     <>
       <div className="p-4 px-5 md:px-10 flex flex-col items-center">
-        <div className="text-xl md:text-2xl font-bold text-black w-full mb-4">
-          Users
-        </div>
         <div className="w-full md:w-2/3">
+          <div className="text-xl md:text-2xl font-bold text-black w-full mb-4">
+            Users List
+          </div>
           <Input
             type="text"
             id="username"
@@ -59,7 +57,6 @@ const UserDetails = () => {
             }}
           />
         </div>
-
         {userList.length > 0 ? (
           userList.map((user) => (
             <div key={user._id} className="w-full md:w-2/3 mb-4">
@@ -77,14 +74,7 @@ const UserDetails = () => {
                     {`${user.firstname} ${user.lastname}`}
                   </div>
                 </div>
-                <Button
-                  className="text-sm md:text-base"
-                  onClick={() => {
-                    handleSendMoneyBtn(user);
-                  }}
-                >
-                  Send Money
-                </Button>
+                <MoneyTransfer user={user} />
               </div>
             </div>
           ))

@@ -227,8 +227,12 @@ userController.findUsers = async (req, res) => {
     let query = {};
 
     if (filter) {
+      const regexFilter = new RegExp(filter, 'i');
       query = {
-        $or: [{firstname: filter}, {lastname: filter}],
+        $or: [
+          {firstname: {$regex: regexFilter}},
+          {lastname: {$regex: regexFilter}},
+        ],
       };
     }
 

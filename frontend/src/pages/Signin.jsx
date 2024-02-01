@@ -80,8 +80,8 @@ const Signin = () => {
           'http://localhost:3000/api/v1/user/signin',
           formData
         );
-        console.log(response);
         localStorage.setItem('token', response.data.token);
+        navigate('/dashboard');
       } catch (error) {
         setErrors((prev) => ({
           ...prev,

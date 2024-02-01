@@ -241,4 +241,17 @@ userController.findUsers = async (req, res) => {
   }
 };
 
+userController.loggedInUser = async (req, res) => {
+  const {userId} = req;
+  try {
+    const User = await userModel.findOne({_id: userId});
+    res.status(200).send({
+      firstname: User.firstname,
+      lastname: User.lastname,
+    });
+  } catch (error) {
+    res.status(400).send({message: 'User could not be found'});
+  }
+};
+
 module.exports = userController;

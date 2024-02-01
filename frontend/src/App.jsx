@@ -1,9 +1,8 @@
-import React from 'react';
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import Signup from './pages/Signup';
-import Signin from './pages/Signin';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import SendMoney from './pages/SendMoney';
+import Signin from './pages/Signin';
+import Signup from './pages/Signup';
 
 function App() {
   return (

@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 
 import {Button} from '@/components/ui/button';
-import {useToast} from '@/components/ui/use-toast';
 import {
   Card,
   CardContent,
@@ -15,7 +14,6 @@ import {Input} from '@/components/ui/input';
 import {Label} from '@/components/ui/label';
 
 import axios from 'axios';
-import {Toaster} from '@/components/ui/toaster';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -27,9 +25,6 @@ const Signup = () => {
 
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  // const [submitted, setSubmitted] = useState(false);
-
-  const {toast} = useToast();
 
   const handleInputChange = (element) => {
     const {name, value} = element;
@@ -107,11 +102,8 @@ const Signup = () => {
           'http://localhost:3000/api/v1/user/signup',
           formData
         );
-        toast({
-          title: 'Sign Up Complete',
-          description: response.data.message,
-        });
         localStorage.setItem('token', response.data.token);
+        navigate('/dashboard');
       } catch (error) {
         if (error.response.data.field === 'username') {
           setErrors((prev) => ({
@@ -126,7 +118,6 @@ const Signup = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-neutral-800">
-      <Toaster />
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>Sign Up</CardTitle>

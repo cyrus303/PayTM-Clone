@@ -7,5 +7,10 @@ router.post('/signup', userController.userSignUp);
 router.post('/signin', userController.userSignIn);
 router.put('/', authenticateUser, userController.updateUserDetails);
 router.get('/bulk', userController.findUsers);
+router.get(
+  '/loggedInUser',
+  authenticateUser,
+  userController.loggedInUser
+);
 
 module.exports = router;

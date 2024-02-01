@@ -31,17 +31,17 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex justify-between p-4 px-10 border-b-2 border-grey-500 items-center ">
-      <div className="text-3xl font-bold  text-black">
+    <div className="flex flex-col md:flex-row justify-between p-4 px-5 md:px-10 border-b-2 border-gray-300 items-center">
+      <div className="text-xl md:text-3xl font-bold text-black mb-2 md:mb-0">
         Payments App
       </div>
       <div className="flex justify-between items-center">
-        <span className="text-xl mr-4 capitalize font-normal">
+        <span className="text-base md:text-xl mr-4 capitalize font-normal">
           Hello, {currentUser?.contents?.firstname ?? 'User'}
         </span>
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <Avatar className="h-14 w-14">
+            <Avatar className="h-10 w-10 md:h-14 md:w-14">
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>

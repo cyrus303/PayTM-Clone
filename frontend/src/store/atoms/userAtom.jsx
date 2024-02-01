@@ -37,3 +37,8 @@ export const currentUserBalanceSelector = selector({
     return response.data;
   },
 });
+
+export const userListAtom = atom({
+  key: 'userListAtom',
+  default: '',
+});

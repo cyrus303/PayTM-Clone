@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const {userModel} = require('../Model/userModel');
 const {JWT_SECRET} = require('../config');
 const accountModel = require('../Model/accountModel');
+const {default: axios} = require('axios');
 
 const userController = {};
 
@@ -223,11 +224,15 @@ userController.findUsers = async (req, res) => {
 
   try {
     const {filter} = req.query;
-    const Users = await userModel
-      .find({
+    let query = {};
+
+    if (filter) {
+      query = {
         $or: [{firstname: filter}, {lastname: filter}],
-      })
-      .lean();
+      };
+    }
+
+    const Users = await userModel.find(query).lean();
 
     const data = Users.map((userItem) => {
       const {password, ...dataWithoutPassword} = userItem;

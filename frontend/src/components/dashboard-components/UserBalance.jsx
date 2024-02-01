@@ -8,10 +8,10 @@ const UserBalance = () => {
 
   console.log();
   return (
-    <div className="text-2xl font-bold p-4 px-10 mt-5 text-black flex w-1/5  justify-between items-center">
-      <span>UserBalance</span>
-      <span>-</span>
-      <span> &#8377;{currentBalance?.contents?.balance ?? 0}</span>
+    <div className="text-lg font-bold p-2 md:p-4 px-5 md:px-10 mt-5 text-black flex flex-col md:flex-row justify-between items-center">
+      <span>
+        Your Balance - &#8377;{currentBalance?.contents?.balance ?? 0}
+      </span>
     </div>
   );
 };

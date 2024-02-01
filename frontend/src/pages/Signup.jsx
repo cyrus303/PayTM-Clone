@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 
 import {Button} from '@/components/ui/button';
 import {useToast} from '@/components/ui/use-toast';
@@ -25,6 +26,7 @@ const Signup = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
   // const [submitted, setSubmitted] = useState(false);
 
   const {toast} = useToast();
@@ -109,6 +111,7 @@ const Signup = () => {
           title: 'Sign Up Complete',
           description: response.data.message,
         });
+        localStorage.setItem('token', response.data.token);
       } catch (error) {
         if (error.response.data.field === 'username') {
           setErrors((prev) => ({
@@ -118,10 +121,6 @@ const Signup = () => {
         }
         console.error('Error submitting form:', error.response.data);
       }
-
-      // setSubmitted(true); // Set a submitted flag
-    } else {
-      // Form is not valid, display error messages
     }
   };
 
@@ -240,7 +239,17 @@ const Signup = () => {
           >
             Sign Up
           </Button>
-          <p>Already have an account ? Login</p>
+          <p>
+            Already have an account ?{' '}
+            <a
+              className="border-b-2 border-black cursor-pointer"
+              onClick={() => {
+                navigate('/signin');
+              }}
+            >
+              Login
+            </a>
+          </p>
         </CardFooter>
       </Card>
     </div>

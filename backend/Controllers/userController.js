@@ -33,16 +33,19 @@ userController.userSignUp = async (req, res) => {
       .max(50, {message: 'Muse be 50 or fewer characters long'}),
     lastname: z
       .string({
-        required_error: 'Firstname is required',
+        required_error: 'Lastname is required',
       })
       .trim()
       .max(50, {message: 'Muse be 50 or fewer characters long'}),
   });
 
   try {
-    const {success} = userSchema.safeparse(req.body);
+    const {success} = userSchema.safeParse(req.body);
 
     if (!success) {
+      return res.status(411).json({
+        message: 'Incorrect input formats',
+      });
     }
 
     const salt = await bcrypt.genSalt();
@@ -74,12 +77,12 @@ userController.userSignUp = async (req, res) => {
       error.keyValue.username
     ) {
       const username = error.keyValue.username;
-      const errorMessage = `The username "${username}" is already taken. Please choose a different username.`;
-      console.log(errorMessage);
-      return res.status(411).send({message: errorMessage});
-    } else if (error instanceof z.ZodError) {
-      console.log(error.issues);
-      return res.send({error: error.issues});
+      const errorMessage = `username is taken, choose another.`;
+      console.log(error);
+      return res.status(411).send({
+        field: 'username',
+        message: errorMessage,
+      });
     } else {
       console.log('Unknown error occurred:', error);
       return res.status(500).send({

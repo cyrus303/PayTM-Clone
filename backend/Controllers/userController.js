@@ -255,6 +255,7 @@ userController.loggedInUser = async (req, res) => {
   try {
     const User = await userModel.findOne({_id: userId});
     res.status(200).send({
+      username: User.username,
       firstname: User.firstname,
       lastname: User.lastname,
     });

@@ -9,3 +9,8 @@ export const currentBalanceAtom = atom({
   key: 'currentBalanceAtom',
   default: '',
 });
+
+export const currentUserAtom = atom({
+  key: 'currentUserAtom',
+  default: '',
+});

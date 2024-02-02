@@ -11,13 +11,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {currentUserAtom} from '@/store/atoms/userAtom';
 import axios from 'axios';
 import {LogOut, User} from 'lucide-react';
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {useRecoilState} from 'recoil';
 
 const Navbar = () => {
-  const [currentUser, setCurrentUser] = useState('');
+  const [currentUser, setCurrentUser] =
+    useRecoilState(currentUserAtom);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -37,6 +40,10 @@ const Navbar = () => {
     );
 
     setCurrentUser(response.data);
+  };
+
+  const handleProfileChange = () => {
+    navigate('/profile');
   };
 
   useEffect(() => {
@@ -64,7 +71,7 @@ const Navbar = () => {
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
+              <span onClick={handleProfileChange}>Edit Profile</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <LogOut className="mr-2 h-4 w-4" />

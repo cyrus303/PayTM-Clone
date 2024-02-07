@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const {userModel} = require('../Model/userModel');
 const {JWT_SECRET} = require('../config');
 const accountModel = require('../Model/accountModel');
-const {default: axios} = require('axios');
 
 const userController = {};
 

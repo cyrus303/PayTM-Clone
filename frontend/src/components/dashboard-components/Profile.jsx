@@ -17,6 +17,8 @@ import {Button} from '../ui/button';
 
 import {useState} from 'react';
 
+//need to change the logic here
+
 const Profile = () => {
   const [currentUser, setCurrentUser] =
     useRecoilState(currentUserAtom);
@@ -146,7 +148,7 @@ const Profile = () => {
                     id="firstname"
                     name="firstname"
                     placeholder="John"
-                    value={currentUser.firstname}
+                    value={formData.firstname}
                     onChange={(event) => {
                       handleInputChange(event.target);
                     }}
@@ -169,7 +171,7 @@ const Profile = () => {
                     id="lastname"
                     name="lastname"
                     placeholder="doe"
-                    value={currentUser.lastname}
+                    value={formData.lastname}
                     onChange={(event) => {
                       handleInputChange(event.target);
                     }}
@@ -210,7 +212,16 @@ const Profile = () => {
             </div>
           </form>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-3 ">
+        <CardFooter className="flex flex-row gap-5 ">
+          <Button
+            className="w-full mt-2 secondary"
+            onClick={() => {
+              navigate('/dashboard');
+            }}
+            variant="destructive"
+          >
+            Cancel
+          </Button>
           <Button className="w-full mt-2" onClick={handleSubmit}>
             Update
           </Button>

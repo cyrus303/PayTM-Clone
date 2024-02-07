@@ -224,6 +224,7 @@ userController.findUsers = async (req, res) => {
 
   try {
     const {filter} = req.query;
+    const {userId} = req;
     let query = {};
 
     if (filter) {
@@ -238,7 +239,9 @@ userController.findUsers = async (req, res) => {
 
     const Users = await userModel.find(query).lean();
 
-    const data = Users.map((userItem) => {
+    const data = Users.filter(
+      (userItem) => userItem._id.toString() !== userId
+    ).map((userItem) => {
       const {password, ...dataWithoutPassword} = userItem;
       return dataWithoutPassword;
     });

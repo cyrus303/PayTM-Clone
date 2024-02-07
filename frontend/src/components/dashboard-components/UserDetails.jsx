@@ -22,10 +22,16 @@ const UserDetails = () => {
 
   const loadData = async () => {
     try {
+      const token = localStorage.getItem('token');
       const response = await axios.get(
         `http://localhost:3000/api/v1/user/bulk/?filter=${encodeURIComponent(
           filter
-        )}`
+        )}`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
       );
       setUserList(response.data.users);
       return response.data;

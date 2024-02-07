@@ -95,7 +95,7 @@ const Signin = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-neutral-800">
+    <div className="flex flex-col justify-center items-center h-screen bg-neutral-800">
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>Sign In</CardTitle>
@@ -175,6 +175,11 @@ const Signin = () => {
               Signup
             </a>
           </p>
+        </CardFooter>
+      </Card>
+      <Card className="m-5">
+        <CardFooter className="mt-4">
+          Demo Account: Demo@gmail.com <br /> Password: 123456
         </CardFooter>
       </Card>
     </div>
